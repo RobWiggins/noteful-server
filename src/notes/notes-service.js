@@ -1,10 +1,8 @@
 'use strict';
-const knex = require('knex');
 
 const NotesService = {
-  getAllNotes(db) {
-    return db('notes')
-      .select('*');
+  getAllNotes(knex) {
+    return knex.select('*').from('notes');
   },
   addNote(db, note) {
 

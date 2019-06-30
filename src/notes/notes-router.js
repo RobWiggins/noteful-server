@@ -10,7 +10,9 @@ const notesRouter = express.Router();
 const jsonBodyParser = express.json();
 
 const serializeNote = note => ({
-  title: xss(note.note_name),
+  id: note.id,
+  title: xss(note.title),
+  modified: note.modified,
   folderId: note.folderId,
   content: xss(note.content),
 });
@@ -20,17 +22,33 @@ notesRouter
   .get((req, res, next) => {
     const knexInstance = req.app.get('db');
     NotesService.getAllNotes(knexInstance)
-      .then(response => res.status(200).json(response))
+      .then(notes => res.json(notes.map(serializeNote)))
       .catch(next);
   })
-  .post((req, res, next) => {
-     
+  .post(jsonBodyParser, (req, res, next) => {
+    const { title, content, folderid } = req.body;
+    const newNote = { title, content };
+    for (const [key, value] of Object.entries(newNote)) {
+      if (key === 'content' && !value) {
+        newNote.content = '';
+      }
+      if (key === 'title' && title === null) {
+        return res.status(400).json({
+          error: { message: `Missing ${key} in required body` },
+        });
+      }
+    }
+    newNote['folderid'] = Number(folderid);
+    NotesService.insertNote(req.app.get('db'), newNote)
+      .then(note => {
+        res
+          .status(201)
+          .location(path.posix.join(req.originalUrl, `/${note.id}`))
+          .json(serializeNote(note));
+      })
+      .catch(next);
   })
-  .patch((req, res, next) => {
-    
-  })
-  .delete((req, res, next) => {
-    
-  });
+  .patch((req, res, next) => {})
+  .delete((req, res, next) => {});
 
 module.exports = notesRouter;

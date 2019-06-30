@@ -1,11 +1,17 @@
 'use strict';
 
+/* TODO INCOMPLETE TESTING NOTES */
+
 const app = require('../src/app');
 
-describe('App', () => {
-  it('GET / responds with 200 containing "Hello, server and boilerplate!"', () => {
+before();
+
+describe('Testing NotesService and notesRouter', () => {
+  it('GET /notes responds with 200 containing all notes', () => {
     return supertest(app)
-      .get('/')
+      .get('/notes')
       .expect(200, 'Hello, server and boilerplate!');
   });
+
+  it()
 });

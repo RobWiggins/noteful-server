@@ -4,19 +4,30 @@ const NotesService = {
   getAllNotes(knex) {
     return knex.select('*').from('notes');
   },
-  addNote(db, note) {
-
+  addNote(knex, note) {
+    return knex
+      .insert(note)
+      .into('notes')
+      .returning('*')
+      .then(rows => rows[0]);
   },
-  getNoteById(db, noteId) {
-
+  getNoteById(knex, noteId) {
+    return knex
+      .select('*')
+      .from('notes')
+      .where('id', noteId)
+      .first();
   },
-  deleteNote(db, noteId) {
-
+  deleteNote(knex, noteId) {
+    return knex('notes')
+      .where('id', noteId)
+      .delete();
   },
-  updateNote(db, noteId, newNote) {
-
-  }
-
+  updateNote(knex, noteId, newNote) {
+    return knex('notes')
+      .where('id', noteId)
+      .update(newNote);
+  },
 };
 
 module.exports = NotesService;

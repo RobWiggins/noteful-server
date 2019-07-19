@@ -23,7 +23,6 @@ notesRouter
     const knexInstance = req.app.get('db');
     NotesService.getAllNotes(knexInstance)
       .then(notes => {
-        console.log('Sent notes', notes);
         return res.json(notes.map(serializeNote));
       })
       .catch(next);
@@ -39,7 +38,7 @@ notesRouter
         error: { message: 'Missing title in required body' }, // TODO may need next to pick up error message
       });
     }
-    newNote['folderId'] = parseInt(folderId);
+    newNote['folderid'] = parseInt(folderId);
     NotesService.insertNote(req.app.get('db'), newNote)
       .then(note => {
         res
@@ -72,7 +71,8 @@ notesRouter
       .catch(next);
   })
   .delete(jsonBodyParser, (req, res, next) => {
-    let noteId = req.body.noteId;
+    let noteId = req.body.id;
+    console.log('getting params noteId: ', noteId);
     NotesService.deleteNote(req.app.get('db'), parseInt(noteId))
       .then(() => res.status(204).end())
       .catch(next);

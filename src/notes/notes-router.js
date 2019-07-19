@@ -13,7 +13,7 @@ const serializeNote = note => ({
   id: note.id,
   title: xss(note.title),
   modified: note.modified,
-  folderId: note.folderId,
+  folderId: note.folderid,
   content: xss(note.content),
 });
 
@@ -22,11 +22,14 @@ notesRouter
   .get((req, res, next) => {
     const knexInstance = req.app.get('db');
     NotesService.getAllNotes(knexInstance)
-      .then(notes => res.json(notes.map(serializeNote)))
+      .then(notes => {
+        console.log('Sent notes', notes);
+        return res.json(notes.map(serializeNote));
+      })
       .catch(next);
   })
   .post(jsonBodyParser, (req, res, next) => {
-    const { title, content, folderid } = req.body;
+    const { title, content, folderId } = req.body;
     const newNote = { title, content };
     if (!content) {
       newNote.content = '';
@@ -36,7 +39,7 @@ notesRouter
         error: { message: 'Missing title in required body' }, // TODO may need next to pick up error message
       });
     }
-    newNote['folderid'] = parseInt(folderid);
+    newNote['folderId'] = parseInt(folderId);
     NotesService.insertNote(req.app.get('db'), newNote)
       .then(note => {
         res

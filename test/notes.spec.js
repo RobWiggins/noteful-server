@@ -1,7 +1,5 @@
 'use strict';
 
-/* TODO INCOMPLETE TESTING NOTES */
-
 const app = require('../src/app');
 
 before();

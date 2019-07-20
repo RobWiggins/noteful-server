@@ -26,8 +26,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use('/folders', foldersRouter);
-app.use('/notes', notesRouter);
+app.use('folders', foldersRouter);
+app.use('notes', notesRouter);
 
 app.use(function errorHandler(error, req, res, next) {
   let response;

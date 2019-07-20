@@ -72,7 +72,6 @@ notesRouter
   })
   .delete(jsonBodyParser, (req, res, next) => {
     let noteId = req.body.id;
-    console.log('getting params noteId: ', noteId);
     NotesService.deleteNote(req.app.get('db'), parseInt(noteId))
       .then(() => res.status(204).end())
       .catch(next);

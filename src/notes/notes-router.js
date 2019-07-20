@@ -35,7 +35,7 @@ notesRouter
     }
     if (!title) {
       return res.status(400).json({
-        error: { message: 'Missing title in required body' }, // TODO may need next to pick up error message
+        error: { message: 'Missing title in required body' },
       });
     }
     newNote['folderid'] = parseInt(folderId);
@@ -50,7 +50,6 @@ notesRouter
   })
   .patch(jsonBodyParser, (req, res, next) => {
     const { title, content, noteId, folderId } = req.body;
-    // body requires noteId
     const noteToUpdate = { title, content };
 
     const numberOfValues = Object.values(noteToUpdate).filter(Boolean).length;

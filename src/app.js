@@ -17,14 +17,8 @@ app.use(morgan(morganOption));
 app.use(cors());
 app.use(helmet());
 
-// what additional stuff??
-
 app.use('/folders', foldersRouter);
 app.use('/notes', notesRouter);
-
-// app.get('/', (req, res) => {
-//   res.status(200).send('Hello, server and boilerplate!');
-// });
 
 app.use(function errorHandler(error, req, res, next) {
   let response;

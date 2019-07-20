@@ -2,7 +2,7 @@
 
 const express = require('express');
 const knex = require('knex');
-const path = require('path'); // need? join posix?
+const path = require('path');
 const NotesService = require('./notes-service');
 const xss = require('xss');
 
